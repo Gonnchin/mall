@@ -1,0 +1,78 @@
+{# 继承父模板 #}
+{% extends 'common/base.html' %}
+
+{# 加载标签 #}
+{% load staticfiles %}
+
+
+{# 顶部js代码 #}
+{% block header_js %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#order_btn').click(function () {
+
+            // 获取订单所有商品id
+            goods_list = $(this).attr('goods_id');
+            // 付款方式
+            goods_pay = $('input[name="pay_style"]:checked').val();
+            // csrf_token
+            csrf_value = $('input[name="csrfmiddlewaretoken"]').val();
+            $.post('{% url "orders:order_handle" %}',{'goods_list':goods_list,
+                    'goods_pay':goods_pay, 'csrfmiddlewaretoken':csrf_value},
+                function (date) {
+                    if(date.ret==1){
+                        window.location.href = '{% url "users:order" %}';
+                    }
+                });
+        });
+    });
+
+</script>
+{% endblock header_js %}
+
+
+{# 登陆页面主体部分内容 #}
+{% block body %}
+
+{# 头部登陆信息 #}
+{% include 'common/keep_status.html' %}
+{% csrf_token %}
+<div class="search_bar clearfix">
+    <a href="{% url 'goods:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}"></a>
+    <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;提交订单</div>
+    <div class="search_con fr">
+        <input type="text" class="input_text fl" name="" placeholder="搜索商品">
+        <input type="button" class="input_btn fr" name="" value="搜索">
+    </div>
+</div>
+
+
+<h3 class="common_title">搜索的商品为{{ query }}</h3>
+
+<div class="common_list_con clearfix">
+    <ul class="goods_list_th clearfix">
+        <li class="col01">商品名称</li>
+        <li class="col02">商品单位</li>
+        <li class="col03">商品价格</li>
+        <li class="col04">数量</li>
+        <li class="col05">小计</li>
+    </ul>
+    {% for goods in page %}
+    <ul class="goods_list_td clearfix">
+        <li class="col01">1</li>
+        <li class="col02"><a href="{% url 'goods:detail' %}?id={{ goods.object.id }}"><img src="{% static goods.object.goods_image %}"></li></a>
+        <li class="col03">{{ goods.object.goods_name }}</li>
+        <li class="col04">{{ goods.object.goods_unit }}g</li>
+        <li class="col05">{{ goods.object.goods_price }}元</li>
+    </ul>
+    {% endfor %}
+</div>
+
+
+
+<div class="order_submit clearfix">
+    <a href="javascript:;" id="order_btn" goods_id="{{ goods_list }}" name="goods_list">提交订单</a>
+</div>
+
+{% endblock body %}

@@ -1,0 +1,28 @@
+
+{# 方式１ #}
+{% comment %}
+<div class="left_menu_con clearfix">
+    <h3>用户中心</h3>
+    <ul>
+        <li><a href="{% url 'users:index' %}" {% if flag == 'info' %}class='active'{% endif %}>· 个人信息</a></li>
+        <li><a href="{% url 'users:order' %}" {% if flag == 'order' %}class='active'{% endif %}>· 全部订单</a></li>
+        <li><a href="{% url 'users:address' %}" {% if flag == 'address' %}class='active'{% endif %}>· 收货地址</a></li>
+    </ul>
+</div>
+{% endcomment %}
+
+
+
+{# 方式2 #}
+{% load users_filters %}
+
+<div class="left_menu_con clearfix">
+    <h3>用户中心</h3>
+    <ul>
+        {% with menu=flag|create_menu %}
+            {% for info in menu %}
+                <li><a href="{{ info.link }}" class='{{ info.active }}'>{{ info.name }}</a></li>
+            {% endfor %}
+        {% endwith %}
+    </ul>
+</div>
