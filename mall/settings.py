@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mall',
         'USER': 'root',
-        'PASSWORD': 'mysql',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -142,3 +142,18 @@ HAYSTACK_CONNECTIONS = {
 }
 # 当添加、修改、删除数据时，自动生成索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+
+# 配置redis缓存
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'redis_cache.cache.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+#         },
+#     },
+# }
+# REDIS_TIMEOUT=7*24*60*60
+# CUBES_REDIS_TIMEOUT=60*60
+# NEVER_REDIS_TIMEOUT=365*24*60*60
